@@ -41,5 +41,6 @@ contract NftFullSubsidyPaymaster is BasePaymaster {
 
         uint256 nftCount = IERC721(nftContract).balanceOf(userOp.sender);
         require(nftCount > 0, "No nfts found at wallet address");
+        return abi.encode(nftContract, IERC721(nftContract), nftCount);
     }
 }
