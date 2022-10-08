@@ -28,12 +28,11 @@ contract NftFullSubsidyPaymaster is BasePaymaster {
      * Verify that the user wallet holds an NFT.
      * the "paymasterAndData" is expected to contain the NFT contract address.
      */
-    function validatePaymasterUserOp(UserOperation calldata userOp, bytes32 requestId, uint256 requiredPreFund)
-        external
-        view
-        override
-        returns (bytes memory context)
-    {
+    function validatePaymasterUserOp(
+        UserOperation calldata userOp,
+        bytes32 requestId,
+        uint256 requiredPreFund
+    ) external view override returns (bytes memory context) {
         (requestId, requiredPreFund, context); // avoid warnings
 
         address nftContract = address(bytes20(userOp.paymasterAndData[20:]));
@@ -41,6 +40,8 @@ contract NftFullSubsidyPaymaster is BasePaymaster {
 
         uint256 nftCount = IERC721(nftContract).balanceOf(userOp.sender);
         require(nftCount > 0, "No nfts found at wallet address");
-        return abi.encode(nftContract, IERC721(nftContract), nftCount);
+        return abi.encode(userOp.sender);
     }
+
+    function _postOp(PostOpMode mode, bytes calldata context, uint256 actualGasCost) internal virtual override {}
 }
