@@ -7,4 +7,3 @@ pragma solidity ^0.8.12;
 interface ICreate2Deployer {
     function deploy(bytes memory initCode, bytes32 salt) external returns (address);
 }
-

@@ -8,7 +8,6 @@ import "../UserOperation.sol";
  * a paymaster must hold a stake to cover the required entrypoint stake and also the gas for the transaction.
  */
 interface IPaymaster {
-
     /**
      * payment validation: check if paymaster agree to pay.
      * Must verify sender is the entryPoint.
@@ -19,18 +18,20 @@ interface IPaymaster {
      * @param requestId hash of the user's request data.
      * @param maxCost the maximum cost of this transaction (based on maximum gas and gas price from userOp)
      * @return context value to send to a postOp
-     *  zero length to signify postOp is not required.
+     * zero length to signify postOp is not required.
      */
-    function validatePaymasterUserOp(UserOperation calldata userOp, bytes32 requestId, uint256 maxCost) external returns (bytes memory context);
+    function validatePaymasterUserOp(UserOperation calldata userOp, bytes32 requestId, uint256 maxCost)
+        external
+        returns (bytes memory context);
 
     /**
      * post-operation handler.
      * Must verify sender is the entryPoint
      * @param mode enum with the following options:
-     *      opSucceeded - user operation succeeded.
-     *      opReverted  - user op reverted. still has to pay for gas.
-     *      postOpReverted - user op succeeded, but caused postOp (in mode=opSucceeded) to revert.
-     *                       Now this is the 2nd call, after user's op was deliberately reverted.
+     * opSucceeded - user operation succeeded.
+     * opReverted  - user op reverted. still has to pay for gas.
+     * postOpReverted - user op succeeded, but caused postOp (in mode=opSucceeded) to revert.
+     * Now this is the 2nd call, after user's op was deliberately reverted.
      * @param context - the context value returned by validatePaymasterUserOp
      * @param actualGasCost - actual gas used so far (without this postOp call).
      */

@@ -11,16 +11,15 @@ import "./interfaces/IStakeManager.sol";
  * stake is value locked for at least "unstakeDelay" by a paymaster.
  */
 abstract contract StakeManager is IStakeManager {
-
     /**
      * minimum time (in seconds) required to lock a paymaster stake before it can be withdraw.
      */
-    uint32 immutable public unstakeDelaySec;
+    uint32 public immutable unstakeDelaySec;
 
     /**
      * minimum value required to stake for a paymaster
      */
-    uint256 immutable public paymasterStake;
+    uint256 public immutable paymasterStake;
 
     constructor(uint256 _paymasterStake, uint32 _unstakeDelaySec) {
         unstakeDelaySec = _unstakeDelaySec;
@@ -71,13 +70,7 @@ abstract contract StakeManager is IStakeManager {
         uint256 stake = info.stake + msg.value;
         require(stake >= paymasterStake, "stake value too low");
         require(stake < type(uint112).max, "stake overflow");
-        deposits[msg.sender] = DepositInfo(
-            info.deposit,
-            true,
-            uint112(stake),
-            _unstakeDelaySec,
-            0
-        );
+        deposits[msg.sender] = DepositInfo(info.deposit, true, uint112(stake), _unstakeDelaySec, 0);
         emit StakeLocked(msg.sender, stake, _unstakeDelaySec);
     }
 
@@ -95,7 +88,6 @@ abstract contract StakeManager is IStakeManager {
         emit StakeUnlocked(msg.sender, withdrawTime);
     }
 
-
     /**
      * withdraw from the (unlocked) stake.
      * must first call unlockStake and wait for the unstakeDelay to pass
@@ -111,7 +103,7 @@ abstract contract StakeManager is IStakeManager {
         info.withdrawTime = 0;
         info.stake = 0;
         emit StakeWithdrawn(msg.sender, withdrawAddress, stake);
-        (bool success,) = withdrawAddress.call{value : stake}("");
+        (bool success,) = withdrawAddress.call{value: stake}("");
         require(success, "failed to withdraw stake");
     }
 
@@ -125,7 +117,7 @@ abstract contract StakeManager is IStakeManager {
         require(withdrawAmount <= info.deposit, "Withdraw amount too large");
         info.deposit = uint112(info.deposit - withdrawAmount);
         emit Withdrawn(msg.sender, withdrawAddress, withdrawAmount);
-        (bool success,) = withdrawAddress.call{value : withdrawAmount}("");
+        (bool success,) = withdrawAddress.call{value: withdrawAmount}("");
         require(success, "failed to withdraw");
     }
 }

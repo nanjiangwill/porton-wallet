@@ -15,7 +15,6 @@ import "@eth-infinitism/account-abstraction/contracts/core/BasePaymaster.sol";
  * - the wallet signs to prove identity and wallet ownership.
  */
 contract MasterOfPaymaster is BasePaymaster {
-
     using UserOperationLib for UserOperation;
 
     constructor(IEntryPoint _entryPoint) BasePaymaster(_entryPoint) {}
@@ -28,30 +27,39 @@ contract MasterOfPaymaster is BasePaymaster {
      * which will carry the signature itself.
      */
     function getHash(UserOperation calldata userOp)
-    public pure returns (bytes32) {
+        public
+        pure
+        returns (bytes32)
+    {
         //can't use userOp.hash(), since it contains also the paymasterAndData itself.
-        return keccak256(abi.encode(
-                userOp.getSender(),
-                userOp.nonce,
-                keccak256(userOp.initCode),
-                keccak256(userOp.callData),
-                userOp.callGasLimit,
-                userOp.verificationGasLimit,
-                userOp.preVerificationGas,
-                userOp.maxFeePerGas,
-                userOp.maxPriorityFeePerGas
-            ));
+        return
+            keccak256(
+                abi.encode(
+                    userOp.getSender(),
+                    userOp.nonce,
+                    keccak256(userOp.initCode),
+                    keccak256(userOp.callData),
+                    userOp.callGasLimit,
+                    userOp.verificationGasLimit,
+                    userOp.preVerificationGas,
+                    userOp.maxFeePerGas,
+                    userOp.maxPriorityFeePerGas
+                )
+            );
     }
 
     /**
      * verify our external signer signed this request.
      * the "paymasterAndData" is expected to be the paymaster and a signature over the entire request params
      */
-    function validatePaymasterUserOp(UserOperation calldata userOp, bytes32 /*requestId*/, uint256 requiredPreFund)
-    external view override returns (bytes memory context) {
+    function validatePaymasterUserOp(
+        UserOperation calldata userOp,
+        bytes32,
+        /*requestId*/
+        uint256 requiredPreFund
+    ) external view override returns (bytes memory context) {
         //TODO: implement this part
         // (requiredPreFund);
-
         // bytes32 hash = getHash(userOp);
         // bytes calldata paymasterAndData = userOp.paymasterAndData;
         // uint256 sigLength = paymasterAndData.length - 20;
@@ -59,10 +67,8 @@ contract MasterOfPaymaster is BasePaymaster {
         // // we only "require" it here so that the revert reason on invalid signature will be of "VerifyingPaymaster", and not "ECDSA"
         // require(sigLength == 64 || sigLength == 65, "VerifyingPaymaster: invalid signature length in paymasterAndData");
         // require(verifyingSigner == hash.toEthSignedMessageHash().recover(paymasterAndData[20:]), "VerifyingPaymaster: wrong signature");
-
         // //no need for other on-chain validation: entire UserOp should have been checked
         // // by the external service prior to signing it.
         // return "";
     }
-
 }

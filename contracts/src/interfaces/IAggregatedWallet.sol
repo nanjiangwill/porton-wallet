@@ -11,7 +11,6 @@ import "./IAggregator.sol";
  * - the validateUserOp MUST valiate the aggregator parameter, and MAY ignore the userOp.signature field.
  */
 interface IAggregatedWallet is IWallet {
-
     /**
      * return the address of the signature aggregator the wallet supports.
      */

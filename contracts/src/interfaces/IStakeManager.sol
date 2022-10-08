@@ -7,36 +7,17 @@ pragma solidity ^0.8.12;
  * stake is value locked for at least "unstakeDelay" by a paymaster.
  */
 interface IStakeManager {
+    event Deposited(address indexed account, uint256 totalDeposit);
 
-    event Deposited(
-        address indexed account,
-        uint256 totalDeposit
-    );
-
-    event Withdrawn(
-        address indexed account,
-        address withdrawAddress,
-        uint256 amount
-    );
+    event Withdrawn(address indexed account, address withdrawAddress, uint256 amount);
 
     /// Emitted once a stake is scheduled for withdrawal
-    event StakeLocked(
-        address indexed account,
-        uint256 totalStaked,
-        uint256 withdrawTime
-    );
+    event StakeLocked(address indexed account, uint256 totalStaked, uint256 withdrawTime);
 
     /// Emitted once a stake is scheduled for withdrawal
-    event StakeUnlocked(
-        address indexed account,
-        uint256 withdrawTime
-    );
+    event StakeUnlocked(address indexed account, uint256 withdrawTime);
 
-    event StakeWithdrawn(
-        address indexed account,
-        address withdrawAddress,
-        uint256 amount
-    );
+    event StakeWithdrawn(address indexed account, address withdrawAddress, uint256 amount);
 
     /**
      * minimum time (in seconds) required to lock a paymaster stake before it can be withdraw.
@@ -55,10 +36,10 @@ interface IStakeManager {
      * @param unstakeDelaySec minimum delay to withdraw the stake. must be above the global unstakeDelaySec
      * @param withdrawTime - first block timestamp where 'withdrawStake' will be callable, or zero if already locked
      * @dev sizes were chosen so that (deposit,staked) fit into one cell (used during handleOps)
-     *    and the rest fit into a 2nd cell.
-     *    112 bit allows for 2^15 eth
-     *    64 bit for full timestamp
-     *    32 bit allow 150 years for unstake delay
+     * and the rest fit into a 2nd cell.
+     * 112 bit allows for 2^15 eth
+     * 64 bit for full timestamp
+     * 32 bit allow 150 years for unstake delay
      */
     struct DepositInfo {
         uint112 deposit;

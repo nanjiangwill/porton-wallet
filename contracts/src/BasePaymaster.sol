@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.12;
 
-
 /* solhint-disable reason-string */
 
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -14,7 +13,6 @@ import "./interfaces/IEntryPoint.sol";
  * validates that the postOp is called only by the entryPoint
  */
 abstract contract BasePaymaster is IPaymaster, Ownable {
-
     IEntryPoint public entryPoint;
 
     constructor(IEntryPoint _entryPoint) {
@@ -25,28 +23,31 @@ abstract contract BasePaymaster is IPaymaster, Ownable {
         entryPoint = _entryPoint;
     }
 
-    function validatePaymasterUserOp(UserOperation calldata userOp, bytes32 requestId, uint256 maxCost) external virtual override returns (bytes memory context);
+    function validatePaymasterUserOp(UserOperation calldata userOp, bytes32 requestId, uint256 maxCost)
+        external
+        virtual
+        override
+        returns (bytes memory context);
 
     function postOp(PostOpMode mode, bytes calldata context, uint256 actualGasCost) external override {
         _requireFromEntryPoint();
         _postOp(mode, context, actualGasCost);
-    }               
+    }
 
     /**
      * post-operation handler.
      * (verified to be called only through the entryPoint)
      * @dev if subclass returns a non-empty context from validatePaymasterUserOp, it must also implement this method.
      * @param mode enum with the following options:
-     *      opSucceeded - user operation succeeded.
-     *      opReverted  - user op reverted. still has to pay for gas.
-     *      postOpReverted - user op succeeded, but caused postOp (in mode=opSucceeded) to revert.
-     *                       Now this is the 2nd call, after user's op was deliberately reverted.
+     * opSucceeded - user operation succeeded.
+     * opReverted  - user op reverted. still has to pay for gas.
+     * postOpReverted - user op succeeded, but caused postOp (in mode=opSucceeded) to revert.
+     * Now this is the 2nd call, after user's op was deliberately reverted.
      * @param context - the context value returned by validatePaymasterUserOp
      * @param actualGasCost - actual gas used so far (without this postOp call).
      */
     function _postOp(PostOpMode mode, bytes calldata context, uint256 actualGasCost) internal virtual {
-
-        (mode,context,actualGasCost); // unused params
+        (mode, context, actualGasCost); // unused params
         // subclass must override this method if validatePaymasterUserOp returns a context
         revert("must override");
     }
@@ -55,7 +56,7 @@ abstract contract BasePaymaster is IPaymaster, Ownable {
      * add a deposit for this paymaster, used for paying for transaction fees
      */
     function deposit() public payable {
-        entryPoint.depositTo{value : msg.value}(address(this));
+        entryPoint.depositTo{value: msg.value}(address(this));
     }
 
     /**
@@ -71,8 +72,9 @@ abstract contract BasePaymaster is IPaymaster, Ownable {
      * This method can also carry eth value to add to the current stake.
      * @param extraUnstakeDelaySec - set the stake to the entrypoint's default unstakeDelay plus this value.
      */
+
     function addStake(uint32 extraUnstakeDelaySec) external payable onlyOwner {
-        entryPoint.addStake{value : msg.value}(entryPoint.unstakeDelaySec() + extraUnstakeDelaySec);
+        entryPoint.addStake{value: msg.value}(entryPoint.unstakeDelaySec() + extraUnstakeDelaySec);
     }
 
     /**
