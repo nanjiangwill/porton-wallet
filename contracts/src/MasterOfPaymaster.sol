@@ -3,7 +3,7 @@ pragma solidity ^0.8.12;
 
 /* solhint-disable reason-string */
 
-import "./BasePaymaster.sol";
+import "@eth-infinitism/account-abstraction/contracts/core/BasePaymaster.sol";
 
 /**
  * A sample paymaster that uses external service to decide whether to pay for the UserOp.
