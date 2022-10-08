@@ -4,9 +4,9 @@ pragma solidity ^0.8.13;
 import "../src/NftFullSubsidyPaymaster.sol";
 
 import "./mocks/NftMock.sol";
-import "./AccountAbstractionBase.t.sol";
+import "./SimpleWallet.t.sol";
 
-contract NftFullSubsidyPaymasterTest is AccountAbstractionBaseTest {
+contract NftFullSubsidyPaymasterTest is SimpleWalletTest {
     NftMock nft;
     NftFullSubsidyPaymaster nftFullSubsidyPaymaster;
 
