@@ -10,7 +10,7 @@ import "@eth-infinitism/account-abstraction/contracts/interfaces/ICreate2Deploye
 
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 
-contract MasterOfPaymasterTest is Test {
+contract AccountAbstractionBaseTest is Test {
     using ECDSA for bytes32;
     using UserOperationLib for UserOperation;
 
@@ -21,7 +21,7 @@ contract MasterOfPaymasterTest is Test {
 
     receive() external payable {}
 
-    function setUp() public {
+    function setUp() public virtual {
         entryPoint = new EntryPoint({
             _paymasterStake: 1 ether,
             _unstakeDelaySec: 1 minutes
@@ -44,9 +44,9 @@ contract MasterOfPaymasterTest is Test {
             nonce: 0,
             initCode: initCode,
             callData: hex"",
-            callGasLimit: 4000_000,
-            verificationGasLimit: 4000_000,
-            preVerificationGas: 4000_000,
+            callGasLimit: 4_000_000,
+            verificationGasLimit: 4_000_000,
+            preVerificationGas: 4_000_000,
             maxFeePerGas: 100 gwei,
             maxPriorityFeePerGas: 100 gwei,
             paymasterAndData: hex"",
@@ -60,11 +60,11 @@ contract MasterOfPaymasterTest is Test {
         UserOperation[] memory ops = new UserOperation[](1);
         ops[0] = op;
 
-        uint256 balanceBefore = address(wallet).balance;
+        uint256 walletBalanceBefore = address(wallet).balance;
         entryPoint.handleOps(ops, payable(address(this)));
-        uint256 balanceAfter = address(wallet).balance;
-        
-        assertTrue(balanceAfter < balanceBefore);
+        uint256 walletBalanceAfter = address(wallet).balance;
+
+        assertTrue(walletBalanceAfter < walletBalanceBefore, "wallet balance should decrease");
     }
 
     function revertWithSenderAddressExternal(bytes memory initCode) external {
