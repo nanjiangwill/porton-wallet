@@ -5,6 +5,7 @@ import "forge-std/Script.sol";
 
 contract MasterOfPaymasterScript is Script {
     function setUp() public {}
+
     function run() public {
         vm.broadcast();
     }
