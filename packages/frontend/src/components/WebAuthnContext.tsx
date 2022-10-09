@@ -1,10 +1,9 @@
 import { DEPLOY_PRIVATE_KEY, provider } from 'constants/ethers'
 import metadata from 'contracts/WebauthnWalletABI.json'
 import { BigNumber, ethers } from 'ethers'
-import { useState } from 'react'
-import { createContext, PropsWithChildren, useContext } from 'react'
-import * as CBOR from '../utils/cbor'
-import * as Helper from '../utils/helpers'
+import { createContext, PropsWithChildren, useContext, useState } from 'react'
+import * as CBOR from 'utils/cbor'
+import * as Helper from 'utils/helpers'
 
 export interface IWebAuthnContext {
   address: string | null
