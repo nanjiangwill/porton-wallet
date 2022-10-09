@@ -138,6 +138,8 @@ export const WebAuthnProvider = ({ children }: PropsWithChildren) => {
       localStorage.removeItem('webauthn.chanllenge')
 
       setAddress(null)
+      setUUID(null)
+      setChanllenge(null)
     },
   }
 
