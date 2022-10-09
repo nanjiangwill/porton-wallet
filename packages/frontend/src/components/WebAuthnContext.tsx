@@ -7,7 +7,7 @@ import * as Helper from 'utils/helpers'
 
 export interface IWebAuthnContext {
   address: string | null
-  credentialId: string | null
+  chanllenge: string | null
   signIn: () => Promise<PublicKeyCredential>
   signOut: () => void
 }
@@ -18,15 +18,15 @@ export const useWebAuthn = () => useContext(WebAuthnContext)
 
 export const WebAuthnProvider = ({ children }: PropsWithChildren) => {
   const [address, setAddress] = useState(localStorage.getItem('wallet_address'))
-  const [credentialId, setCredentialId] = useState(
-    localStorage.getItem('webauthn.credentialId'),
+  const [chanllenge, setChanllenge] = useState(
+    localStorage.getItem('webauthn.chanllenge'),
   )
 
   const value: IWebAuthnContext = {
     address,
-    credentialId,
+    chanllenge,
     signIn: async () => {
-      if (localStorage.getItem('webauthn.credentialId')) {
+      if (localStorage.getItem('webauthn.chanllenge')) {
         alert('Credential exists')
 
         throw new Error('Credential exists')
@@ -50,6 +50,8 @@ export const WebAuthnProvider = ({ children }: PropsWithChildren) => {
       )
 
       const uuid = crypto.randomUUID()
+      const chanllenge = crypto.randomUUID()
+
       const publicKeyCredential = await navigator.credentials.create({
         publicKey: {
           challenge: Uint8Array.from(crypto.randomUUID(), c => c.charCodeAt(0)),
@@ -118,10 +120,10 @@ export const WebAuthnProvider = ({ children }: PropsWithChildren) => {
       console.log('contract dep tx', contract.deployTransaction)
 
       localStorage.setItem('wallet_address', contract.address)
-      localStorage.setItem('webauthn.credentialId', publicKeyCredential.id)
+      localStorage.setItem('webauthn.chanllenge', chanllenge)
 
       setAddress(contract.address)
-      setCredentialId(publicKeyCredential.id)
+      setChanllenge(chanllenge)
 
       return publicKeyCredential as PublicKeyCredential
     },
