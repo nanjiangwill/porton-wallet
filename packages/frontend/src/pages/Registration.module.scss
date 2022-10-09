@@ -1,0 +1,50 @@
+.page {
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .back {
+    position: absolute;
+
+    top: 50px;
+    left: 50px;
+
+    cursor: pointer;
+    transition: transform 200ms;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(1);
+    }
+  }
+
+  .icon {
+    path {
+      fill: url(#gradient);
+    }
+
+    transition: transform 200ms;
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(1);
+    }
+  }
+
+  .message {
+    margin-top: 40px;
+
+    font-size: 32px;
+    text-align: center;
+  }
+}

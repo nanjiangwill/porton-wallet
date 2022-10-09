@@ -1,0 +1,10 @@
+.page {
+  .heading {
+    display: inline-block;
+
+    background: linear-gradient(to right, #fc466b, #3f5efb);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}

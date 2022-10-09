@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "frontend:build": "yarn workspace frontend build",
+    "frontend:start": "yarn workspace frontend start"
+  }
+}
