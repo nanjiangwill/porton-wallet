@@ -7,6 +7,7 @@ import * as Helper from 'utils/helpers'
 
 export interface IWebAuthnContext {
   address: string | null
+  uuid: string | null
   chanllenge: string | null
   signIn: () => Promise<PublicKeyCredential>
   signOut: () => void
@@ -18,12 +19,14 @@ export const useWebAuthn = () => useContext(WebAuthnContext)
 
 export const WebAuthnProvider = ({ children }: PropsWithChildren) => {
   const [address, setAddress] = useState(localStorage.getItem('wallet_address'))
+  const [uuid, setUUID] = useState(localStorage.getItem('webauthn.uuid'))
   const [chanllenge, setChanllenge] = useState(
     localStorage.getItem('webauthn.chanllenge'),
   )
 
   const value: IWebAuthnContext = {
     address,
+    uuid,
     chanllenge,
     signIn: async () => {
       if (localStorage.getItem('webauthn.chanllenge')) {
@@ -54,7 +57,7 @@ export const WebAuthnProvider = ({ children }: PropsWithChildren) => {
 
       const publicKeyCredential = await navigator.credentials.create({
         publicKey: {
-          challenge: Uint8Array.from(crypto.randomUUID(), c => c.charCodeAt(0)),
+          challenge: Uint8Array.from(chanllenge, c => c.charCodeAt(0)),
           rp: {
             name: 'Porton Wallet',
           },
@@ -120,16 +123,19 @@ export const WebAuthnProvider = ({ children }: PropsWithChildren) => {
       console.log('contract dep tx', contract.deployTransaction)
 
       localStorage.setItem('wallet_address', contract.address)
+      localStorage.setItem('webauthn.uuid', uuid)
       localStorage.setItem('webauthn.chanllenge', chanllenge)
 
       setAddress(contract.address)
+      setUUID(uuid)
       setChanllenge(chanllenge)
 
       return publicKeyCredential as PublicKeyCredential
     },
     signOut: () => {
       localStorage.removeItem('wallet_address')
-      localStorage.removeItem('webauthn.credentialId')
+      localStorage.removeItem('webauthn.uuid')
+      localStorage.removeItem('webauthn.chanllenge')
 
       setAddress(null)
     },
