@@ -11,8 +11,11 @@ import { ethers, Contract, Signer, Wallet } from 'ethers'
 import { ecsign, toRpcSig, keccak256 as keccak256_buffer } from 'ethereumjs-util'
 import { UserOperation } from './UserOperation'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
+import Web3 from 'web3'
 
 let EntryPoint = "0x1b98F08dB8F12392EAE339674e568fe29929bC47"
+
+const web3 = new Web3('ws://localhost:8546');
 
 function encode (typevalues: Array<{ type: string, val: any }>, forSignature: boolean): string {
 const types = typevalues.map(typevalue => typevalue.type === 'bytes' && forSignature ? 'bytes32' : typevalue.type)
@@ -140,22 +143,19 @@ export function rpcUserOpSender (provider: ethers.providers.JsonRpcProvider, ent
   }
 
 // execute the RPC call
-let privateKey = "86a7c560ebc7320724ad9beded8b8bf00ade4d8c4d1770b2d4ed0a696db452f2"
-let yan = new Wallet ( privateKey)
+let privateKey = "283386a9b4020ac5031c20f889d236fc9325e231601db7e79a92d3a982382b1f"
+let yan = new Wallet (privateKey)
 let url = "https://goerli.eip4337.com/rpc";
 let RPCProvider = new ethers.providers.JsonRpcProvider(url);
-let countcalldata
-const countContract = new Contract(
-    Count.contract,
-    Count.abi,
-    RPCProvider,
-    )
-countcalldata = SimpleWallet.interface.encodeFunction('increaseCount', [countContract.address, 0, countContract.interface.encodeFunctionData( 'inc')])
+let incABI = Object({"inputs":[],"name":"inc","outputs":[],"stateMutability":"nonpayable","type":"function"});
+let execFromEntrypointABI = Object({"inputs":[{"internalType":"address","name":"dest","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"},{"internalType":"bytes","name":"func","type":"bytes"}],"name":"execFromEntryPoint","outputs":[],"stateMutability":"nonpayable","type":"function"});
+let countCalldata = web3.eth.abi.encodeFunctionCall(incABI, []);
+let walletCalldata = web3.eth.abi.encodeFunctionCall(execFromEntrypointABI, ['0x744f2af121b717a3Bc594f56111B8244a89199D5', '0', countCalldata]);
 const testUserOp: UserOperation = {
-    sender: "0xA2C72CED30fb9b39201F595f68f72498341689D3",
+    sender: "0x0263282d1947bC0Fa3cE881a362FA339da0a1336",
     nonce: 0,
     initCode: '0x',
-    callData: countcalldata,
+    callData: walletCalldata,
     callGasLimit: 0,
     verificationGasLimit: 100000, // default verification gas. will add create2 cost (3200+200*length) if initCode exists
     preVerificationGas: 21000, // should also cover calldata cost.

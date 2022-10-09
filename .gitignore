@@ -49,3 +49,7 @@ lerna-debug.log*
 # contracts
 contracts/out
 contracts/cache
+
+package.json
+yarn.lock
+contracts/lib/account-abstraction
