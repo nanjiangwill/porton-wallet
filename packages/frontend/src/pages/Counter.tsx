@@ -41,6 +41,22 @@ const CounterPage = () => {
           </Button>
         </Flex>
       </Box>
+      <br></br>
+      <Box mb={7} p={5} bgColor="#fafafa" borderRadius="2xl">
+        <Heading fontSize="2xl" mb={5}>
+          Enable 30min Signature-free session
+        </Heading>
+        <Button
+          colorScheme="messenger"
+          onClick={() =>
+            alert(
+              'Your transaction will go through automatically in the next 30 mins. Enjoy your game!',
+            )
+          }
+        >
+          Start
+        </Button>
+      </Box>
     </Container>
   )
 }
