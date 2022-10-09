@@ -21,6 +21,7 @@ contract WebauthnWallet is BaseWallet {
     uint96 private _nonce;
     address public owner;
     address public ec;
+    uint256[2] public q;
 
     function nonce() public view virtual override returns (uint256) {
         return _nonce;
@@ -37,10 +38,11 @@ contract WebauthnWallet is BaseWallet {
     // solhint-disable-next-line no-empty-blocks
     receive() external payable {}
 
-    constructor(IEntryPoint anEntryPoint, address anOwner, address anEllipticCurve) {
+    constructor(IEntryPoint anEntryPoint, address anOwner, address anEllipticCurve, uint256[2] memory _q) {
         _entryPoint = anEntryPoint;
         owner = anOwner;
         ec = anEllipticCurve;
+        q = _q;
     }
 
     modifier onlyOwner() {
@@ -118,7 +120,6 @@ contract WebauthnWallet is BaseWallet {
     function _validateSignature(UserOperation calldata userOp, bytes32 requestId, address) internal view virtual override {
         uint r = uint(bytes32(userOp.signature[0:32]));
         uint s = uint(bytes32(userOp.signature[32:64]));
-        uint[2] memory q = [uint(bytes32(userOp.signature[64:96])), uint(bytes32(userOp.signature[96:128]))];
         require(EllipticCurve(ec).validateSignature(requestId, [r,s], q));
     }
 

@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@account-abstraction/sdk": "^0.2.1",
+    "ethereumjs-util": "^7.1.5",
+    "ethers": "^5.7.1",
+    "web3": "^1.8.0"
+  }
+}
