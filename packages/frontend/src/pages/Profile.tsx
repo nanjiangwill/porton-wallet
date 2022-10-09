@@ -14,6 +14,7 @@ const ProfilePage = () => {
     'https://goerli.etherscan.io/address/0x45896af59d7F83Ff4E39503FA180907aec041002',
   )
   const [ensName, setEnsName] = useState('')
+  const [LensName, setLensName] = useState('')
   const [ethBalance, setETHBalance] = useState(0)
 
   useEffect(() => {
@@ -28,6 +29,7 @@ const ProfilePage = () => {
       const ENSName = await providerETH.lookupAddress(currentAddress)
       if (ENSName !== null) {
         setEnsName(ENSName)
+        setLensName(ENSName)
       }
     }
 
@@ -288,6 +290,9 @@ const ProfilePage = () => {
         <Heading mb={3}>My Account{ensName}</Heading>
         <Text mb={7} fontSize={18}>
           {address}
+        </Text>
+        <Text mb={7} fontSize={18}>
+          {LensName}
         </Text>
         <Flex gap={3} wrap="wrap">
           <Button colorScheme="messenger" onClick={() => navigate('/counter')}>
