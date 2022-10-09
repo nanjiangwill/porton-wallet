@@ -51,7 +51,7 @@ const ProfilePage = () => {
         </Box>
         <Box px={5} py={2} bgColor="#fafafa" borderRadius="2xl">
           <Text fontSize="5xl" fontWeight="light">
-            100.00 USDC
+            0 USDC
           </Text>
         </Box>
       </Box>

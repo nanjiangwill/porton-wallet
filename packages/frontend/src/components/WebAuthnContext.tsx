@@ -7,6 +7,7 @@ import * as Helper from 'utils/helpers'
 
 export interface IWebAuthnContext {
   address: string | null
+  credentialId: string | null
   signIn: () => Promise<PublicKeyCredential>
   signOut: () => void
 }
@@ -17,9 +18,13 @@ export const useWebAuthn = () => useContext(WebAuthnContext)
 
 export const WebAuthnProvider = ({ children }: PropsWithChildren) => {
   const [address, setAddress] = useState(localStorage.getItem('wallet_address'))
+  const [credentialId, setCredentialId] = useState(
+    localStorage.getItem('webauthn.credentialId'),
+  )
 
   const value: IWebAuthnContext = {
     address,
+    credentialId,
     signIn: async () => {
       if (localStorage.getItem('webauthn.credentialId')) {
         alert('Credential exists')
@@ -113,13 +118,16 @@ export const WebAuthnProvider = ({ children }: PropsWithChildren) => {
       console.log('contract dep tx', contract.deployTransaction)
 
       localStorage.setItem('wallet_address', contract.address)
+      localStorage.setItem('webauthn.credentialId', publicKeyCredential.id)
 
       setAddress(contract.address)
+      setCredentialId(publicKeyCredential.id)
 
       return publicKeyCredential as PublicKeyCredential
     },
     signOut: () => {
       localStorage.removeItem('wallet_address')
+      localStorage.removeItem('webauthn.credentialId')
 
       setAddress(null)
     },
