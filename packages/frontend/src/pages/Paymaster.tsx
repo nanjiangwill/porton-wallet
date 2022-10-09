@@ -19,9 +19,16 @@ const PaymasterPage = () => {
         <Heading mb={7}>Paymaster</Heading>
         <Box mb={7} p={5} bgColor="#fafafa" borderRadius="2xl">
           <Heading fontSize="2xl" mb={5}>
-            How will my gas fee be paid?
+            Which Paymaster will pay for my gas fee?
           </Heading>
-          <Button colorScheme="messenger">Connect a paymaster</Button>
+          <Select
+            mb={1}
+            variant="filled"
+            value={tokenType}
+            onChange={event => setTokenType(event.target.value)}
+          >
+            <option value="Default (0x21f9c4495846a2e2d0233512b98d9307fe7d92fb)">Default (0x21f9c4495846a2e2d0233512b98d9307fe7d92fb)</option>
+          </Select>
         </Box>
         <Box mb={7} p={5} bgColor="#fafafa" borderRadius="2xl">
           <Heading fontSize="2xl" mb={5}>
