@@ -5,11 +5,15 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from './Profile.module.scss'
+import { getDefaultProvider } from 'ethers'
 
 const ProfilePage = () => {
   const navigate = useNavigate()
   const { address, signOut } = useWebAuthn()
-
+  const [currentAddress, setcurrentAddress] = useState(
+    'https://goerli.etherscan.io/address/0x45896af59d7F83Ff4E39503FA180907aec041002',
+  )
+  const [ensName, setEnsName] = useState('')
   const [ethBalance, setETHBalance] = useState(0)
 
   useEffect(() => {
@@ -20,7 +24,11 @@ const ProfilePage = () => {
 
       let num2 = await getUsdcBalance(address!)
       setUSDCBalance(num2)
-
+            const providerETH = getDefaultProvider('homestead')
+      const ENSName = await providerETH.lookupAddress(currentAddress)
+      if (ENSName !== null) {
+        setEnsName(ENSName)
+      }
     }
 
     }, [address])
@@ -277,7 +285,7 @@ const ProfilePage = () => {
   return (
     <Container className={styles.page} maxW="container.lg" py={16}>
       <Box mb={16}>
-        <Heading mb={3}>My Account</Heading>
+        <Heading mb={3}>My Account{ensName}</Heading>
         <Text mb={7} fontSize={18}>
           {address}
         </Text>
