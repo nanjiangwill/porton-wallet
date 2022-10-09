@@ -14,26 +14,23 @@ const ProfilePage = () => {
     'https://goerli.etherscan.io/address/0x45896af59d7F83Ff4E39503FA180907aec041002',
   )
   const [ensName, setEnsName] = useState('')
-  const [LensName, setLensName] = useState('')
   const [ethBalance, setETHBalance] = useState(0)
 
   useEffect(() => {
     const loadData = async () => {
       provider
-      .getBalance(address!)
-      .then(balance => setETHBalance(balance.toNumber()))
+        .getBalance(address!)
+        .then(balance => setETHBalance(balance.toNumber()))
 
       let num2 = await getUsdcBalance(address!)
       setUSDCBalance(num2)
-            const providerETH = getDefaultProvider('homestead')
+      const providerETH = getDefaultProvider('homestead')
       const ENSName = await providerETH.lookupAddress(currentAddress)
       if (ENSName !== null) {
         setEnsName(ENSName)
-        setLensName(ENSName)
       }
     }
-
-    }, [address])
+  }, [address])
 
   const [usdcBalance, setUSDCBalance] = useState(0)
   // const usdcContractAddr = "0x07865c6e87b9f70255377e024ace6630c1eaa37f"
@@ -42,231 +39,235 @@ const ProfilePage = () => {
 
   // const balance = (contract.balanceOf(address!)).toNumber();
   async function getUsdcBalance(addr: string) {
-    const ethers = require('ethers');
+    const ethers = require('ethers')
     const genericErc20Abi = [
       {
-        "constant": true,
-        "inputs": [],
-        "name": "name",
-        "outputs": [
+        constant: true,
+        inputs: [],
+        name: 'name',
+        outputs: [
           {
-            "name": "",
-            "type": "string"
-          }
+            name: '',
+            type: 'string',
+          },
         ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
       },
       {
-        "constant": false,
-        "inputs": [
+        constant: false,
+        inputs: [
           {
-            "name": "_spender",
-            "type": "address"
+            name: '_spender',
+            type: 'address',
           },
           {
-            "name": "_value",
-            "type": "uint256"
-          }
+            name: '_value',
+            type: 'uint256',
+          },
         ],
-        "name": "approve",
-        "outputs": [
+        name: 'approve',
+        outputs: [
           {
-            "name": "",
-            "type": "bool"
-          }
+            name: '',
+            type: 'bool',
+          },
         ],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function',
       },
       {
-        "constant": true,
-        "inputs": [],
-        "name": "totalSupply",
-        "outputs": [
+        constant: true,
+        inputs: [],
+        name: 'totalSupply',
+        outputs: [
           {
-            "name": "",
-            "type": "uint256"
-          }
+            name: '',
+            type: 'uint256',
+          },
         ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
       },
       {
-        "constant": false,
-        "inputs": [
+        constant: false,
+        inputs: [
           {
-            "name": "_from",
-            "type": "address"
+            name: '_from',
+            type: 'address',
           },
           {
-            "name": "_to",
-            "type": "address"
+            name: '_to',
+            type: 'address',
           },
           {
-            "name": "_value",
-            "type": "uint256"
-          }
+            name: '_value',
+            type: 'uint256',
+          },
         ],
-        "name": "transferFrom",
-        "outputs": [
+        name: 'transferFrom',
+        outputs: [
           {
-            "name": "",
-            "type": "bool"
-          }
+            name: '',
+            type: 'bool',
+          },
         ],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function',
       },
       {
-        "constant": true,
-        "inputs": [],
-        "name": "decimals",
-        "outputs": [
+        constant: true,
+        inputs: [],
+        name: 'decimals',
+        outputs: [
           {
-            "name": "",
-            "type": "uint8"
-          }
+            name: '',
+            type: 'uint8',
+          },
         ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
       },
       {
-        "constant": true,
-        "inputs": [
+        constant: true,
+        inputs: [
           {
-            "name": "_owner",
-            "type": "address"
-          }
+            name: '_owner',
+            type: 'address',
+          },
         ],
-        "name": "balanceOf",
-        "outputs": [
+        name: 'balanceOf',
+        outputs: [
           {
-            "name": "balance",
-            "type": "uint256"
-          }
+            name: 'balance',
+            type: 'uint256',
+          },
         ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
       },
       {
-        "constant": true,
-        "inputs": [],
-        "name": "symbol",
-        "outputs": [
+        constant: true,
+        inputs: [],
+        name: 'symbol',
+        outputs: [
           {
-            "name": "",
-            "type": "string"
-          }
+            name: '',
+            type: 'string',
+          },
         ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
       },
       {
-        "constant": false,
-        "inputs": [
+        constant: false,
+        inputs: [
           {
-            "name": "_to",
-            "type": "address"
+            name: '_to',
+            type: 'address',
           },
           {
-            "name": "_value",
-            "type": "uint256"
-          }
+            name: '_value',
+            type: 'uint256',
+          },
         ],
-        "name": "transfer",
-        "outputs": [
+        name: 'transfer',
+        outputs: [
           {
-            "name": "",
-            "type": "bool"
-          }
+            name: '',
+            type: 'bool',
+          },
         ],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function',
       },
       {
-        "constant": true,
-        "inputs": [
+        constant: true,
+        inputs: [
           {
-            "name": "_owner",
-            "type": "address"
+            name: '_owner',
+            type: 'address',
           },
           {
-            "name": "_spender",
-            "type": "address"
-          }
+            name: '_spender',
+            type: 'address',
+          },
         ],
-        "name": "allowance",
-        "outputs": [
+        name: 'allowance',
+        outputs: [
           {
-            "name": "",
-            "type": "uint256"
-          }
+            name: '',
+            type: 'uint256',
+          },
         ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
       },
       {
-        "payable": true,
-        "stateMutability": "payable",
-        "type": "fallback"
+        payable: true,
+        stateMutability: 'payable',
+        type: 'fallback',
       },
       {
-        "anonymous": false,
-        "inputs": [
+        anonymous: false,
+        inputs: [
           {
-            "indexed": true,
-            "name": "owner",
-            "type": "address"
+            indexed: true,
+            name: 'owner',
+            type: 'address',
           },
           {
-            "indexed": true,
-            "name": "spender",
-            "type": "address"
+            indexed: true,
+            name: 'spender',
+            type: 'address',
           },
           {
-            "indexed": false,
-            "name": "value",
-            "type": "uint256"
-          }
+            indexed: false,
+            name: 'value',
+            type: 'uint256',
+          },
         ],
-        "name": "Approval",
-        "type": "event"
+        name: 'Approval',
+        type: 'event',
       },
       {
-        "anonymous": false,
-        "inputs": [
+        anonymous: false,
+        inputs: [
           {
-            "indexed": true,
-            "name": "from",
-            "type": "address"
+            indexed: true,
+            name: 'from',
+            type: 'address',
           },
           {
-            "indexed": true,
-            "name": "to",
-            "type": "address"
+            indexed: true,
+            name: 'to',
+            type: 'address',
           },
           {
-            "indexed": false,
-            "name": "value",
-            "type": "uint256"
-          }
+            indexed: false,
+            name: 'value',
+            type: 'uint256',
+          },
         ],
-        "name": "Transfer",
-        "type": "event"
-      }
-    ];
-    const tokenContractAddress = '0x07865c6e87b9f70255377e024ace6630c1eaa37f';
-    const contract = new ethers.Contract(tokenContractAddress, genericErc20Abi, provider);
+        name: 'Transfer',
+        type: 'event',
+      },
+    ]
+    const tokenContractAddress = '0x07865c6e87b9f70255377e024ace6630c1eaa37f'
+    const contract = new ethers.Contract(
+      tokenContractAddress,
+      genericErc20Abi,
+      provider,
+    )
     let num = await contract.balanceOf(addr)
     console.log(num)
     console.log(num.toNumber())
@@ -274,15 +275,10 @@ const ProfilePage = () => {
     return a
   }
 
-
-
-
   //   async function getAmount(currency, address) {
   //     const amount = await currency.contract.methods.balanceOf(address).call();
   //     return amount * currency.usdrate;
   //  }
-
-
 
   return (
     <Container className={styles.page} maxW="container.lg" py={16}>
@@ -290,9 +286,6 @@ const ProfilePage = () => {
         <Heading mb={3}>My Account{ensName}</Heading>
         <Text mb={7} fontSize={18}>
           {address}
-        </Text>
-        <Text mb={7} fontSize={18}>
-          {LensName}
         </Text>
         <Flex gap={3} wrap="wrap">
           <Button colorScheme="messenger" onClick={() => navigate('/counter')}>
