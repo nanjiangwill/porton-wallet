@@ -5,11 +5,11 @@ import { useNavigate } from 'react-router-dom'
 import styles from './Registration.module.scss'
 
 const RegistrationPage = () => {
-  const { privateKey, signIn } = useWebAuthn()
+  const { address, signIn } = useWebAuthn()
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (privateKey !== null) {
+    if (address !== null) {
       navigate('/profile')
     }
   })

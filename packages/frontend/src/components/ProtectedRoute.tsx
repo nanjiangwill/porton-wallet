@@ -2,9 +2,9 @@ import { useWebAuthn } from 'components/WebAuthnContext'
 import { Navigate } from 'react-router-dom'
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-  const { privateKey } = useWebAuthn()
+  const { address } = useWebAuthn()
 
-  if (privateKey === null) {
+  if (address === null) {
     return <Navigate to="/registration" replace />
   }
 
